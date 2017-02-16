@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Fomin strength routine calculator</title>
+	<title>Fomin strength routine weight calculator</title>
 
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<style>
@@ -10,200 +10,287 @@
 			text-align: center;
 		}
 
-		tbody tr td:nth-last-child(-n+5) {
+		tbody tr td:nth-last-child(-n+4) {
 			text-align: right;
 		}
 
-		tbody tr td:nth-last-child(-n+4) {
+		tbody tr td:nth-last-child(-n+3) {
 			text-align: center;
 		}
 
 		.container {
 			max-width: 750px;
 		}
+
+		input {
+			text-align: center;
+		}
 	</style>
+
+	<script type="text/javascript">
+		class Weights {
+			constructor(s, b, d, els, cycle) {
+				this.s = new Number(s);
+				this.b = new Number(b);
+				this.d = new Number(d);
+				this.els = els;
+				this.cycle = new Number(cycle);
+
+				this.calculate();
+			}
+
+			set(exercise, weight) {
+				this[exercise] = localStorage[exercise] = weight;
+				this.calculate();
+			}
+
+			calculate() {
+				let s = this.s;
+				let b = this.b;
+				let d = this.d;
+				let c = (7 + this.cycle) / 10;
+
+				for (var i = this.els.length - 1; i >= 0; i--) {
+					let e = this.els[i].dataset.formula;
+					
+					this.els[i].innerHTML = new Number(eval('`' + e.replace(/`/g,'\\`') + '`')).toFixed(2);
+				}
+			}
+		};
+
+		document.addEventListener('DOMContentLoaded', function() {
+			let se = document.getElementById('s');
+			let be = document.getElementById('b');
+			let de = document.getElementById('d');
+
+			let s = localStorage.s || 0;
+			let b = localStorage.b || 0;
+			let d = localStorage.d || 0;
+			let cycle = localStorage.cycle || 1;
+
+			let els = document.querySelectorAll('span[data-formula]');
+			let cycles = document.querySelectorAll('.cycles a');
+
+			cycles[cycle - 1].classList.add('active');
+
+			se.value = s;
+			be.value = b;
+			de.value = d;
+
+			const w = new Weights(s, b, d, els, cycle);
+
+			se.addEventListener('change', function(e) {
+		        w.set('s', e.target.value);
+		    });
+
+		    be.addEventListener('change', function(e) {
+		        w.set('b', e.target.value);
+		    });
+
+		    de.addEventListener('change', function(e) {
+				w.set('d', e.target.value);
+		    });
+
+		    for (let i = 0; i < cycles.length; i++) {
+			    cycles[i].onclick = function(e) {
+			    	for (let i = 0; i < cycles.length; i++) {
+					    cycles[i].classList.remove('active');
+					}
+
+					w.set('cycle', i + 1);
+			    	this.classList.add('active');
+
+			    	e.preventDefault();
+			    };
+			}
+		});
+	</script>
 </head>
 <body class="container">
-	<h1>Fomin strength routine calculator</h1>
-	<p>Intro Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi et sint, ipsam maxime alias aperiam eligendi dolor doloribus ab impedit temporibus perferendis quam animi quo accusamus mollitia quas incidunt aspernatur!</p>
+	<section class="intro hidden-print">
+		<header class="page-header">
+			<h1>Fomin strength routine weight calculator</h1>
+			<p class="lead">Intro Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi et sint, ipsam maxime alias aperiam eligendi dolor doloribus ab impedit temporibus perferendis quam animi quo accusamus mollitia quas incidunt aspernatur!</p>
+		</header>
 
-	<h2>Set your <a href="http://torrancetraininglab.com/2013/07/15/1rm/" title="1 repetition maximum">1RM</a> weights</h2>
-	<table>
-		<thead>
-			<tr>
-				<th>squat</th>
-				<th>benchpress</th>
-				<th>deadlift</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><input type="number" min=0></td>
-				<td><input type="number" min=0></td>
-				<td><input type="number" min=0></td>
-			</tr>
-		</tbody>
-	</table>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, placeat! Natus blanditiis esse, cumque, obcaecati quasi praesentium autem commodi minus repellendus maxime magnam saepe et, vel laborum tempora! Perferendis, aperiam.</p>
 
-	<h2>Results</h2>
-	<h3>Cycle 1</h3>
-	<table class="table table-bordered table-condensed">
-		<caption>Day A</caption>
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>exercise</th>
-				<th>sets</th>
-				<th>reps</th>
-				<th colspan="2">weight</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td rowspan="2">1</td>
-				<td><span class="label label-danger">heavy</span> squats (volume)</td>
-				<td>4-5</td>
-				<td>6</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><span class="label label-danger">heavy</span> squats (intensity)</td>
-				<td>3-4</td>
-				<td>3</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>2</td>
-				<td><span class="label label-warning">medium</span> benchpress</td>
-				<td>4</td>
-				<td>4</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td><span class="label label-success">light</span> deadlifts</td>
-				<td>4</td>
-				<td>4-5</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+		<h2>Set your <a href="http://torrancetraininglab.com/2013/07/15/1rm/" title="1 repetition maximum">1RM</a> weights</h2>
+		<table class="table bg-primary">
+			<thead>
+				<tr>
+					<th>squat</th>
+					<th>benchpress</th>
+					<th>deadlift</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="form-control input-lg" type="number" min="0" step="0.5" id="s"></td>
+					<td><input class="form-control input-lg" type="number" min="0" step="0.5" id="b"></td>
+					<td><input class="form-control input-lg" type="number" min="0" step="0.5" id="d"></td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
 
-	<table class="table table-bordered table-condensed">
-		<caption>Day B</caption>
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>exercise</th>
-				<th>sets</th>
-				<th>reps</th>
-				<th colspan="2">weight</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td rowspan="2">1</td>
-				<td><span class="label label-danger">heavy</span> benchpress (volume)</td>
-				<td>4-5</td>
-				<td>6</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><span class="label label-danger">heavy</span> benchpress (intensity)</td>
-				<td>3-4</td>
-				<td>3</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>2</td>
-				<td><span class="label label-success">light</span> squats</td>
-				<td>4</td>
-				<td>5-6</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td><span class="label label-warning">medium</span> deadlifts</td>
-				<td>3-4</td>
-				<td>3</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+	<main role="main">
+		<h2 class="hidden-print">Results</h2>
+		<div class="btn-group btn-group-lg btn-group btn-group-justified cycles" role="group">
+			<a href="#!" class="btn btn-default" data-cycle="1">1. cycle <small>(80%)</small></a>
+			<a href="#!" class="btn btn-default" data-cycle="2">2. cycle <small>(90%)</small></a>
+			<a href="#!" class="btn btn-default" data-cycle="3">3. cycle <small>(100%)</small></a>
+			<a href="#!" class="btn btn-default" data-cycle="4">4. cycle <small>(110%)</small></a>
+		</div>
+		
+		<table class="table table-bordered table-condensed">
+			<caption>Day A</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th width="50%">exercise</th>
+					<th>sets</th>
+					<th>reps</th>
+					<th width="25%">weight</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">1</td>
+					<td><span class="label label-danger">heavy</span> squats (volume)</td>
+					<td>4-5</td>
+					<td>6</td>
+					<td><span data-formula="${c*s*0.8}"></span></td>
+				</tr>
+				<tr>
+					<td><span class="label label-danger">heavy</span> squats (intensity)</td>
+					<td>3-4</td>
+					<td>3</td>
+					<td><span data-formula="${c*s*0.85}"></span> - <span data-formula="${c*s*0.9}"></span></td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td><span class="label label-warning">medium</span> benchpress</td>
+					<td>4</td>
+					<td>4</td>
+					<td><span data-formula="${c*b*0.7}"></span> - <span data-formula="${c*b*0.75}"></span></td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td><span class="label label-success">light</span> deadlifts</td>
+					<td>4</td>
+					<td>4-5</td>
+					<td><span data-formula="${c*d*0.6}"></span></td>
+				</tr>
+			</tbody>
+		</table>
 
-	<table class="table table-bordered table-condensed">
-		<caption>Day C</caption>
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>exercise</th>
-				<th>sets</th>
-				<th>reps</th>
-				<th colspan="2">weight</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td rowspan="2">1</td>
-				<td><span class="label label-danger">heavy</span> deadlifts (volume)</td>
-				<td>4-5</td>
-				<td>6</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
+		<table class="table table-bordered table-condensed">
+			<caption>Day B</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th width="50%">exercise</th>
+					<th>sets</th>
+					<th>reps</th>
+					<th width="25%">weight</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">1</td>
+					<td><span class="label label-danger">heavy</span> benchpress (volume)</td>
+					<td>4-5</td>
+					<td>6</td>
+					<td><span data-formula="${c*b*0.8}"></span></td>
+				</tr>
+				<tr>
+					<td><span class="label label-danger">heavy</span> benchpress (intensity)</td>
+					<td>3-4</td>
+					<td>3</td>
+					<td><span data-formula="${c*b*0.85}"></span> - <span data-formula="${c*b*0.9}"></span></td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td><span class="label label-success">light</span> squats</td>
+					<td>4</td>
+					<td>5-6</td>
+					<td><span data-formula="${c*s*0.5}"></span> - <span data-formula="${c*s*0.6}"></span></td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td><span class="label label-warning">medium</span> deadlifts</td>
+					<td>3-4</td>
+					<td>3</td>
+					<td><span data-formula="${c*d*0.7}"></span></td>
+				</tr>
+			</tbody>
+		</table>
 
-				<td><span class="label label-danger">heavy</span> deadlifts (intensity)</td>
-				<td>3-4</td>
-				<td>3</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>2</td>
-				<td>deadlifts from base</td>
-				<td>3</td>
-				<td>3-4</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td><span class="label label-success">light</span> benchpress</td>
-				<td>4</td>
-				<td>6-8</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>4</td>
-				<td><span class="label label-success">light</span> squats</td>
-				<td>3</td>
-				<td>5-6</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+		<table class="table table-bordered table-condensed">
+			<caption>Day C</caption>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th width="50%">exercise</th>
+					<th>sets</th>
+					<th>reps</th>
+					<th width="25%">weight</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">1</td>
+					<td><span class="label label-danger">heavy</span> deadlifts (volume)</td>
+					<td>4-5</td>
+					<td>6</td>
+					<td><span data-formula="${c*d*0.8}"></span></td>
+				</tr>
+				<tr>
 
-	<h2>Notes</h2>
-	<ol>
-		<li>A cycle consists of two weeks, each is either "volume" or "intensity". It is recommended to start a cycle with a "volume" week.</li>
-		<li>You can include som additional exercises (military press, pull ups, dips, abs, ...) in the end of every session.</li>
-	</ol>
+					<td><span class="label label-danger">heavy</span> deadlifts (intensity)</td>
+					<td>3-4</td>
+					<td>3</td>
+					<td><span data-formula="${c*d*0.85}"></span> - <span data-formula="${c*d*0.9}"></span></td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>deadlifts from base</td>
+					<td>3</td>
+					<td>3-4</td>
+					<td><span data-formula="${c*d*0.95}"></span> - <span data-formula="${c*d*1.1}"></span></td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td><span class="label label-success">light</span> benchpress</td>
+					<td>4</td>
+					<td>6-8</td>
+					<td><span data-formula="${c*b*0.6}"></span> - <span data-formula="${c*b*0.7}"></span></td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td><span class="label label-success">light</span> squats</td>
+					<td>3</td>
+					<td>5-6</td>
+					<td><span data-formula="${c*s*0.5}"></span> - <span data-formula="${c*s*0.6}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+	</main>
+	
+	<section class="hidden-print">
+		<h2>Notes</h2>
+		<ol>
+			<li>A cycle consists of two weeks, each is either "volume" or "intensity". It is recommended to start a cycle with a "volume" week.</li>
+			<li>You can include som additional exercises (military press, pull ups, dips, abs, ...) in the end of every session.</li>
+			<li>It's easy to <a href="javascript:window.print()">print the results</a>.</li>
+		</ol>
+	</section>
 
 	<hr>
 
 	<footer class="text-center">
-		<p>by <a href="http://romanvesely.com">roman</a> - <a href="https://github.com/crazko/fomin">github</a>, <a href="https://twitter.com/rmnvsl">twitter</a></p>
+		<p>by <a href="http://romanvesely.com">roman</a> — <a href="https://github.com/crazko">github</a>, <a href="https://twitter.com/rmnvsl">twitter</a></p>
 	</footer>
 </body>
 </html>
