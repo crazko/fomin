@@ -1,7 +1,7 @@
 # Fomin strength routine calculator
 
-Get your weights for this powerlifting / strength routine.
+Calculates weights for this powerlifting / strength routine according to on your [1RMs](http://torrancetraininglab.com/2013/07/15/1rm/).
 
-## [Run](http://crazko.github.io/fomin)
+## [💪 Get your weights!](http://crazko.github.io/fomin)
 
-![screenshot](screenshot.png)
+[![screenshot](screenshot.png)](http://crazko.github.io/fomin)
